@@ -4,7 +4,7 @@ import {Form, Input, Button, TextArea} from 'semantic-ui-react';
 
 const NewRecordPage = (props) => {
 
-    const {modelOpened, onDeleteClick, onSaveClick} = props;
+    const {modelOpened, onDeleteClick, onSaveClick, onRenewClick} = props;
 
     return (
 
@@ -54,9 +54,9 @@ const NewRecordPage = (props) => {
                     </Form.Field>
                 </Form.Group>
             </Form>
-
-            {modelOpened && (<Button color='red' floated='right' onClick={onDeleteClick} >Sil</Button>)}
             <Button floated='right' primary onClick={onSaveClick} >Kaydet</Button>
+            {modelOpened && (<Button color='red' floated='right' onClick={onDeleteClick} >Sil</Button>)}
+            {!modelOpened && (<Button floated='right' onClick={onRenewClick} >Yenile</Button>)}
 
         </div>
     )

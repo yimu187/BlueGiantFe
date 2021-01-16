@@ -60,6 +60,17 @@ class App extends Component {
         this.setConfirmWindowOpened(true);
     }
 
+    onRenewClick = () => {
+        this.setState({
+            formData: {
+                id: null,
+                ad: '',
+                soyad: '',
+                adres: '',
+            }
+        })
+    }
+
     onSaveClick = () => {
 
         const { state } = this;
@@ -240,7 +251,7 @@ class App extends Component {
                     <Grid.Column stretched width={12}>
                         <Segment>
                             {welcomPage && (<WelcomePage/>)}
-                            {newRecord && (<NewRecordPage formData={formData} onFormDataChanged={this.onFormDataChanged} onSaveClick={this.onSaveClick} modelOpened={modelOpened}/>)}
+                            {newRecord && (<NewRecordPage formData={formData} onFormDataChanged={this.onFormDataChanged} onSaveClick={this.onSaveClick} modelOpened={modelOpened} onRenewClick={this.onRenewClick}/>)}
                             {listing && (<ListPage tableData={tableData} onIconClick={this.onIconClick} loading={loading}/>)}
                         </Segment>
                     </Grid.Column>
