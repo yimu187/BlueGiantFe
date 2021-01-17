@@ -8,6 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import WelcomePage from "./components/WelcomePage";
 import NewRecordPage from "./components/NewRecordPage";
 import ListPage from "./components/ListPage";
+import SinginPage from "./components/SigninPage";
+import SignupPage from "./components/SignupPage";
+
 
 class App extends Component {
 
@@ -29,6 +32,14 @@ class App extends Component {
         tableData:[],
         loading: false,
         confirmOpened: false,
+        signinUsername: '',
+        signinPassword: '',
+        showSignin: true,
+        jwt: null,
+        signupUsername: '',
+        signupPassword: '',
+        signupEmail: '',
+        showSignup: false,
     }
 
     constructor(){
@@ -36,6 +47,30 @@ class App extends Component {
         this.onFormDataChanged = this.onFormDataChanged.bind(this);
 
         document.title = 'Task Page';
+    }
+
+    componentDidMount() {
+        this.checkLoginInfo();
+    }
+
+    checkLoginInfo = () => {
+        const url = "/api/auth/loginInfo"
+        const self = this;
+        axios.get(url)
+            .then(function (response) {
+                const { data } = response;
+                const { success, jwt } = data;
+                if(success === true){
+                    self.setState({
+                        jwt,
+                        showSignin: jwt == null
+                    });
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+
     }
 
     onFormDataChanged = (field, event) =>  {
@@ -74,11 +109,16 @@ class App extends Component {
     onSaveClick = () => {
 
         const { state } = this;
-        const { modelOpened } = state;
+        const { modelOpened, jwt } = state;
 
         const formData = !modelOpened ? this.state.formData : this.state.windowFormData;
         var self = this;
-        axios.post('/formData', formData)
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + jwt,
+            }
+        }
+        axios.post('/formData', formData, config)
             .then(function (response) {
                 const { data } = response;
                 const { success, message, dto } = data;
@@ -103,19 +143,40 @@ class App extends Component {
             });
     };
 
+    sendLogoutRequest = () => {
+        const self = this;
+        const url = "/api/auth/logout"
+        axios.post(url)
+            .then(function (response) {
+                console.log(response);
+                window.location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+                self.notifyFailure("Hata Durum oluşmuştur. Lütfen Sistem Yöneticiniz ile görüşünüz");
+            });
+    }
 
     handleItemClick = (e, { name }) => {
         if(name === 'Listeleme'){
             this.sendListRequest();
         }
         this.setState({ activeItem: name })
+        if(name === 'Çıkış'){
+            this.sendLogoutRequest();
+        }
     };
 
     sendListRequest = () => {
         var self = this;
         const url = '/formData';
         this.setState({loading: true})
-        axios.get(url)
+        let config = {
+            headers: {
+                Authorization: 'Bearer ' + this.state.jwt,
+            }
+        };
+        axios.get(url, config)
             .then(function (response) {
                 const { data } = response;
                 const { success, message, list } = data;
@@ -199,7 +260,10 @@ class App extends Component {
             var self = this;
             axios.delete('/formData',
                 {
-                    data: windowFormData
+                    data: windowFormData,
+                    headers: {
+                        Authorization: 'Bearer ' + this.state.jwt,
+                    }
                 }
 
             )
@@ -223,16 +287,99 @@ class App extends Component {
         }
     }
 
+    onSignFormDataChanged = (field, event) => {
+        const {id, value} = event;
+        const obj = {};
+        obj[id]=  value;
+        this.setState(obj)
+    }
+
+    onOpenSignupFormClick= () => {
+        this.setState({
+            showSignup: true,
+            showSignin: false,
+        })
+    }
+    onSignupClick = () => {
+        var self = this;
+        const url = '/api/auth/signup';
+        const signupRequest = {
+            username: this.state.signupUsername,
+            password: this.state.signupPassword,
+            email: this.state.signupEmail,
+            role:['ROLE_USER']
+        }
+        axios.post(url, signupRequest)
+            .then(function (response) {
+                const { data } = response;
+                const { success, message, jwt } = data;
+                if(success === true){
+                    self.setState({
+                        jwt,
+                        showSignup: false
+                    });
+                }else{
+                    self.notifyFailure(message);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                self.notifyFailure("Hata Durum oluşmuştur. Lütfen Sistem Yöneticiniz ile görüşünüz");
+            });
+    }
+
+    onSigninClick = () => {
+
+        var self = this;
+        const url = '/api/auth/signin';
+        const signinRequest = {
+            username: this.state.signinUsername,
+            password: this.state.signinPassword,
+        }
+        axios.post(url, signinRequest)
+            .then(function (response) {
+                const { data } = response;
+                const { success, message, jwt } = data;
+                if(success === true){
+                    self.setState({
+                        jwt,
+                        showSignin: false
+                    });
+                }else{
+                    self.notifyFailure(message);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+                self.notifyFailure("Hata Durum oluşmuştur. Lütfen Sistem Yöneticiniz ile görüşünüz");
+            });
+
+    }
+
     render() {
-        const { activeItem, formData, tableData, modelOpened, windowFormData, loading, confirmOpened } = this.state
+        const {
+            activeItem,
+            formData,
+            tableData,
+            modelOpened,
+            windowFormData,
+            loading,
+            confirmOpened,
+            signinUsername,
+            signinPassword,
+            showSignin,
+            signupUsername,
+            signupPassword,
+            showSignup,
+        } = this.state
         const welcomPage = activeItem === 'Giriş';
-        const newRecord = activeItem === 'Yeni Kayıt';
+        const newRecord = activeItem === 'Yeni Kayıt' ;
         const listing = activeItem === 'Listeleme';
 
         return (
             <div>
                 <ToastContainer />
-                <Grid>
+                {!showSignin && !showSignup && (<Grid>
                     <Grid.Column width={3}>
                         <Menu fluid vertical tabular>
                             <Menu.Item
@@ -250,17 +397,26 @@ class App extends Component {
                                 active={listing}
                                 onClick={this.handleItemClick}
                             />
+                            <Menu.Item
+                                name='Çıkış'
+                                active={listing}
+                                onClick={this.handleItemClick}
+                            />
                         </Menu>
                     </Grid.Column>
 
                     <Grid.Column stretched width={12}>
                         <Segment>
                             {welcomPage && (<WelcomePage/>)}
-                            {newRecord && (<NewRecordPage formData={formData} onFormDataChanged={this.onFormDataChanged} onSaveClick={this.onSaveClick} modelOpened={modelOpened} onRenewClick={this.onRenewClick}/>)}
-                            {listing && (<ListPage tableData={tableData} onIconClick={this.onIconClick} loading={loading}/>)}
+                            {newRecord && (<NewRecordPage formData={formData} onFormDataChanged={this.onFormDataChanged}
+                                                          onSaveClick={this.onSaveClick} modelOpened={modelOpened}
+                                                          onRenewClick={this.onRenewClick}/>)}
+                            {listing && (
+                                <ListPage tableData={tableData} onIconClick={this.onIconClick} loading={loading}/>)}
                         </Segment>
                     </Grid.Column>
-                </Grid>
+                </Grid>)
+                }
 
                 <Modal
                     onClose={() => this.setModelOpened(false)}
@@ -279,11 +435,27 @@ class App extends Component {
                     onCancel={this.onConfirmCancel}
                     onConfirm={this.onConfirmed}
                 />
+                {showSignin && (<SinginPage
+                    username={signinUsername}
+                    password={signinPassword}
+                    onSigninClick={this.onSigninClick}
+                    onSignFormDataChanged={this.onSignFormDataChanged}
+                    onOpenSignupFormClick={this.onOpenSignupFormClick}
+                />)}
+
+                {showSignup && (<SignupPage
+                    username={signupUsername}
+                    password={signupPassword}
+                    onSignupClick={this.onSignupClick}
+                    onSignFormDataChanged={this.onSignFormDataChanged}
+                    onOpenSignupFormClick={this.onOpenSignupFormClick}
+                />)}
 
             </div>
 
         );
     }
+
 }
 
 export default App;

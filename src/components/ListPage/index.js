@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, Dimmer, Loader,  Menu, Table } from 'semantic-ui-react'
+import { Icon, Dimmer, Loader,  Table } from 'semantic-ui-react'
 
 const textAlingCenter = {textAlign: 'center'};
 
