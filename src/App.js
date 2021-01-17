@@ -78,7 +78,7 @@ class App extends Component {
 
         const formData = !modelOpened ? this.state.formData : this.state.windowFormData;
         var self = this;
-        axios.post('/formData/save', formData)
+        axios.post('/formData', formData)
             .then(function (response) {
                 const { data } = response;
                 const { success, message, dto } = data;
@@ -113,7 +113,7 @@ class App extends Component {
 
     sendListRequest = () => {
         var self = this;
-        const url = '/formData/getAll';
+        const url = '/formData';
         this.setState({loading: true})
         axios.get(url)
             .then(function (response) {
@@ -197,7 +197,12 @@ class App extends Component {
             const windowFormData = this.state.windowFormData;
 
             var self = this;
-            axios.post('/formData/delete', windowFormData)
+            axios.delete('/formData',
+                {
+                    data: windowFormData
+                }
+
+            )
                 .then(function (response) {
                     const { data } = response;
                     const { success, message } = data;
