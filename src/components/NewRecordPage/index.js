@@ -53,6 +53,18 @@ const NewRecordPage = (props) => {
                         />
                     </Form.Field>
                 </Form.Group>
+
+                <Form.Group>
+                    <Form.Field>
+                        <Input
+                            placeholder={'Doğum Yeri'}
+                            id="dogumYeri"
+                            value={props.formData.dogumYeri}
+                            onChange={props.onFormDataChanged}
+                        />
+                    </Form.Field>
+                </Form.Group>
+
             </Form>
             <Button floated='right' primary onClick={onSaveClick} >Kaydet</Button>
             {modelOpened && (<Button color='red' floated='right' onClick={onDeleteClick} >Sil</Button>)}

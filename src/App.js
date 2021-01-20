@@ -102,6 +102,8 @@ class App extends Component {
                 ad: '',
                 soyad: '',
                 adres: '',
+                dogumYeri: '',
+
             }
         })
     }
@@ -282,7 +284,7 @@ class App extends Component {
                 })
                 .catch(function (error) {
                     console.log(error);
-                    self.notifyFailure("Hata Durum oluşmuştur. Lütfen Sistem Yöneticiniz ile görüşünüz");
+                    self.notifyFailure("HataonRenewClick Durum oluşmuştur. Lütfen Sistem Yöneticiniz ile görüşünüz");
                 });
         }
     }
