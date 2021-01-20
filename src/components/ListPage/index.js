@@ -20,6 +20,7 @@ const ListPage = (props) => {
                         <Table.HeaderCell width={5} style={textAlingCenter}>Ad</Table.HeaderCell>
                         <Table.HeaderCell width={5} style={textAlingCenter}>Soyad</Table.HeaderCell>
                         <Table.HeaderCell width={10} style={textAlingCenter}>Adres</Table.HeaderCell>
+                        <Table.HeaderCell width={10} style={textAlingCenter}>Doğum Yeri</Table.HeaderCell>
                         <Table.HeaderCell width={2} style={textAlingCenter}>İşlem</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -31,6 +32,7 @@ const ListPage = (props) => {
                                 <Table.Cell style={textAlingCenter}>{tableItem.ad}</Table.Cell>
                                 <Table.Cell style={textAlingCenter}>{tableItem.soyad}</Table.Cell>
                                 <Table.Cell style={textAlingCenter}>{tableItem.adres}</Table.Cell>
+                                <Table.Cell style={textAlingCenter}>{tableItem.dogumYeri}</Table.Cell>
                                 <Table.Cell style={textAlingCenter}>
                                     <Icon name='pencil' id={tableItem.id} onClick={onIconClick}/>
                                 </Table.Cell>
