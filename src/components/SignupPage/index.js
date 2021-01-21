@@ -7,7 +7,7 @@ const SingupPage = (props) => {
         <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
                 <Header as='h2' color='teal' textAlign='center'>
-                    <Image src='/logo.png' /> Log-in to your account
+                    Giriş yapın
                 </Header>
                 <Form size='large'>
                     <Segment stacked>
@@ -16,7 +16,7 @@ const SingupPage = (props) => {
                             fluid
                             icon='user'
                             iconPosition='left'
-                            placeholder='Username'
+                            placeholder='Kullanıcı adı'
                             value={props.username}
                             onChange={props.onSignFormDataChanged}
                         />
@@ -25,7 +25,7 @@ const SingupPage = (props) => {
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder='Password'
+                            placeholder='Şifre'
                             type='password'
                             value={props.password}
                             onChange={props.onSignFormDataChanged}
@@ -35,13 +35,13 @@ const SingupPage = (props) => {
                             fluid
                             icon='mail'
                             iconPosition='left'
-                            placeholder='E-mail address'
+                            placeholder='E-posta adresi'
                             value={props.signupEmail}
                             onChange={props.onSignFormDataChanged}
                         />
 
                         <Button color='teal' fluid size='large' onClick={props.onSignupClick}>
-                            Signup
+                            Kaydol
                         </Button>
                     </Segment>
                 </Form>

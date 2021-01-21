@@ -7,7 +7,7 @@ const SinginPage = (props) => {
         <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: 450 }}>
                 <Header as='h2' color='teal' textAlign='center'>
-                    <Image src='/logo.png' /> Log-in to your account
+                   Giriş Yapın
                 </Header>
                 <Form size='large'>
                     <Segment stacked>
@@ -16,7 +16,7 @@ const SinginPage = (props) => {
                             fluid
                             icon='user'
                             iconPosition='left'
-                            placeholder='Username'
+                            placeholder='Kullanıcı adı'
                             value={props.username}
                             onChange={props.onSignFormDataChanged}
                         />
@@ -25,19 +25,19 @@ const SinginPage = (props) => {
                             fluid
                             icon='lock'
                             iconPosition='left'
-                            placeholder='Password'
+                            placeholder='Şifre'
                             type='password'
                             value={props.password}
                             onChange={props.onSignFormDataChanged}
                         />
 
                         <Button color='teal' fluid size='large' onClick={props.onSigninClick}>
-                            Login
+                            Giriş
                         </Button>
                     </Segment>
                 </Form>
                 <Message>
-                    New to us? <a href='#' onClick={props.onOpenSignupFormClick}>Sign Up</a>
+                    Hesabın yok mu? <a href='#' onClick={props.onOpenSignupFormClick}>Kaydol</a>
                 </Message>
             </Grid.Column>
         </Grid>
